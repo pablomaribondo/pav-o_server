@@ -1,0 +1,25 @@
+{
+  "name": "pavao-server",
+  "version": "1.0.0",
+  "description": "API para o aplicativo pavao-app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pablomaribondo/pavao-server.git"
+  },
+  "keywords": [
+    "node",
+    "api",
+    "rest",
+    "fastify"
+  ],
+  "author": "Pablo Maribondo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pablomaribondo/pavao-server/issues"
+  },
+  "homepage": "https://github.com/pablomaribondo/pavao-server#readme"
+}
