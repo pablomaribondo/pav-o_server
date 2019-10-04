@@ -1,4 +1,4 @@
-# Pavão
+# Pavão 🦚
 
 Aplicativo desenvolvido com o escopo de auxiliar o acompanhamento disciplinar do corpo discente da Universidade Católica de Pernambuco. 
 
