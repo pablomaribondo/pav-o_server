@@ -1,5 +1,4 @@
-[![NPM version][npm-image]][npm-url]
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-round)](https://github.com/prettier/prettier)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fpablomaribondo%2Fpavao-server.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fpablomaribondo%2Fpavao-server?ref=badge_shield)
 
 # Pavão 🦚
