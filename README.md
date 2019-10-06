@@ -1,4 +1,6 @@
 # Pavão 🦚
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fpablomaribondo%2Fpavao-server.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fpablomaribondo%2Fpavao-server?ref=badge_shield)
+
 
 Aplicativo desenvolvido com o escopo de auxiliar o acompanhamento disciplinar do corpo discente da Universidade Católica de Pernambuco. 
 
@@ -26,3 +28,7 @@ Veja também a lista completa de [contribuidores](https://github.com/pablomaribo
 ## Licença
 
 Esse projeto é licenciado pela MIT License - veja também [LICENSE.md](LICENSE.md) para mais detalhes
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fpablomaribondo%2Fpavao-server.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fpablomaribondo%2Fpavao-server?ref=badge_large)
