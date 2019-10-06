@@ -16,6 +16,7 @@
     },
     "rules": {
         "no-console": "error",
+        "import/no-unresolved": "off",
         "prettier/prettier": [
           "error",
           {
