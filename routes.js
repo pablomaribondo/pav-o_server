@@ -7,8 +7,20 @@ async function routes(fastify) {
 
   fastify.route({
     method: 'GET',
+    url: '/api/v1/subjects/grades',
+    handler: subjects.grades,
+  });
+
+  fastify.route({
+    method: 'GET',
     url: '/api/v1/subjects/ongoing',
     handler: subjects.ongoing,
+  });
+
+  fastify.route({
+    method: 'GET',
+    url: '/api/v1/subjects/schedule',
+    handler: subjects.schedule,
   });
 
   fastify.route({
@@ -21,18 +33,6 @@ async function routes(fastify) {
     method: 'GET',
     url: '/api/v1/subjects/to-take',
     handler: subjects.toTake,
-  });
-
-  fastify.route({
-    method: 'GET',
-    url: '/api/v1/subjects/grades',
-    handler: subjects.grades,
-  });
-
-  fastify.route({
-    method: 'GET',
-    url: '/api/v1/subjects/schedule',
-    handler: subjects.schedule,
   });
 }
 
