@@ -3,6 +3,50 @@ const sessionId = require('../Helpers/SessionId');
 const response = require('../response');
 
 /**
+ * Função para retornar as disciplinas sendo cursadas pelo usuário neste período
+ * @param {Object} request - Pedido do cliente
+ * @param {Reply} reply - Resposta para o cliente
+ * @returns {Object} Disciplinas do período
+ */
+async function coursing(request, reply) {
+  const { registration, digit, token } = request.headers;
+  const data = { registration, digit, token };
+
+  try {
+    const loggedInResponse = await login.get(data, reply);
+
+    const url = `${process.env.COLLEGE_LOGIN_URL}${loggedInResponse}`;
+    const gradesResponse = await sessionId.getWithRoutine(url, data, 21, reply);
+
+    return response.ok(gradesResponse.data, '', reply);
+  } catch (error) {
+    return response.badRequest(error.message, '', reply);
+  }
+}
+
+/**
+ * Função para retornar as disciplinas já cursadas pelo usuário
+ * @param {Object} request - Pedido do cliente
+ * @param {Reply} reply - Resposta para o cliente
+ * @returns {Object} Disciplinas cursadas
+ */
+async function covered(request, reply) {
+  const { registration, digit, token } = request.headers;
+  const data = { registration, digit, token };
+
+  try {
+    const loggedInResponse = await login.get(data, reply);
+
+    const url = `${process.env.COLLEGE_LOGIN_URL}${loggedInResponse}`;
+    const gradesResponse = await sessionId.getWithRoutine(url, data, 31, reply);
+
+    return response.ok(gradesResponse.data, '', reply);
+  } catch (error) {
+    return response.badRequest(error.message, '', reply);
+  }
+}
+
+/**
  * Função para retornar as notas do usuário neste período
  * @param {Object} request - Pedido do cliente
  * @param {Reply} reply - Resposta para o cliente
@@ -25,12 +69,12 @@ async function grades(request, reply) {
 }
 
 /**
- * Função para retornar as disciplinas sendo cursadas pelo usuário neste período
+ * Função para retornar as disciplinas a cursar do usuário
  * @param {Object} request - Pedido do cliente
  * @param {Reply} reply - Resposta para o cliente
- * @returns {Object} Disciplinas do período
+ * @returns {Object} Disciplinas a cursar
  */
-async function ongoing(request, reply) {
+async function pending(request, reply) {
   const { registration, digit, token } = request.headers;
   const data = { registration, digit, token };
 
@@ -38,7 +82,7 @@ async function ongoing(request, reply) {
     const loggedInResponse = await login.get(data, reply);
 
     const url = `${process.env.COLLEGE_LOGIN_URL}${loggedInResponse}`;
-    const gradesResponse = await sessionId.getWithRoutine(url, data, 21, reply);
+    const gradesResponse = await sessionId.getWithRoutine(url, data, 32, reply);
 
     return response.ok(gradesResponse.data, '', reply);
   } catch (error) {
@@ -68,54 +112,10 @@ async function schedule(request, reply) {
   }
 }
 
-/**
- * Função para retornar as disciplinas já cursadas pelo usuário
- * @param {Object} request - Pedido do cliente
- * @param {Reply} reply - Resposta para o cliente
- * @returns {Object} Disciplinas cursadas
- */
-async function taken(request, reply) {
-  const { registration, digit, token } = request.headers;
-  const data = { registration, digit, token };
-
-  try {
-    const loggedInResponse = await login.get(data, reply);
-
-    const url = `${process.env.COLLEGE_LOGIN_URL}${loggedInResponse}`;
-    const gradesResponse = await sessionId.getWithRoutine(url, data, 31, reply);
-
-    return response.ok(gradesResponse.data, '', reply);
-  } catch (error) {
-    return response.badRequest(error.message, '', reply);
-  }
-}
-
-/**
- * Função para retornar as disciplinas a cursar do usuário
- * @param {Object} request - Pedido do cliente
- * @param {Reply} reply - Resposta para o cliente
- * @returns {Object} Disciplinas a cursar
- */
-async function toTake(request, reply) {
-  const { registration, digit, token } = request.headers;
-  const data = { registration, digit, token };
-
-  try {
-    const loggedInResponse = await login.get(data, reply);
-
-    const url = `${process.env.COLLEGE_LOGIN_URL}${loggedInResponse}`;
-    const gradesResponse = await sessionId.getWithRoutine(url, data, 32, reply);
-
-    return response.ok(gradesResponse.data, '', reply);
-  } catch (error) {
-    return response.badRequest(error.message, '', reply);
-  }
-}
-
 module.exports = {
+  coursing,
+  covered,
   grades,
-  ongoing,
+  pending,
   schedule,
-  taken,
-  toTake,
 };
