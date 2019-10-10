@@ -280,9 +280,54 @@ async function pending(request, reply) {
     const loggedInResponse = await login.get(data, reply);
 
     const url = `${process.env.COLLEGE_LOGIN_URL}${loggedInResponse.suffixUrl}`;
-    const gradesResponse = await sessionId.getWithRoutine(url, data, 32, reply);
+    const pendingResponse = await sessionId.getWithRoutine(url, data, 32, reply);
 
-    return response.ok(gradesResponse.data, '', reply);
+    const $ = cheerio.load(pendingResponse.body);
+
+    const subjectsTable = $('tbody')
+      .eq(1)
+      .children();
+
+    const subjectsAmount = subjectsTable.length;
+
+    const pendingSubjects = [];
+
+    for (let index = 1; index < subjectsAmount; index += 1) {
+      pendingSubjects.push({
+        period: subjectsTable
+          .eq(index)
+          .children()
+          .eq(0)
+          .text()
+          .trim(),
+        code: subjectsTable
+          .eq(index)
+          .children()
+          .eq(2)
+          .text()
+          .trim(),
+        name: subjectsTable
+          .eq(index)
+          .children()
+          .eq(4)
+          .text()
+          .trim(),
+        credits: subjectsTable
+          .eq(index)
+          .children()
+          .eq(5)
+          .text()
+          .trim(),
+        workload: subjectsTable
+          .eq(index)
+          .children()
+          .eq(6)
+          .text()
+          .trim(),
+      });
+    }
+
+    return response.ok({ pendingSubjects }, null, reply);
   } catch (error) {
     return response.badRequest(error.message, '', reply);
   }
