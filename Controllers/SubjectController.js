@@ -83,7 +83,7 @@ async function coursing(request, reply) {
       });
     }
 
-    return response.ok(coursingSubjects, null, reply);
+    return response.ok({ coursingSubjects }, null, reply);
   } catch (error) {
     return response.badRequest(error.message, '', reply);
   }
@@ -115,7 +115,7 @@ async function covered(request, reply) {
 
     const coveredSubjects = [];
 
-    for (let index = 1; index < subjectsAmount - 1; index += 1) {
+    for (let index = 1; index < subjectsAmount; index += 1) {
       coveredSubjects.push({
         period: subjectsTable
           .eq(index)
@@ -150,7 +150,7 @@ async function covered(request, reply) {
       });
     }
 
-    return response.ok(coveredSubjects, null, reply);
+    return response.ok({ coveredSubjects }, null, reply);
   } catch (error) {
     return response.badRequest(error.message, '', reply);
   }
@@ -172,7 +172,95 @@ async function grades(request, reply) {
     const url = `${process.env.COLLEGE_LOGIN_URL}${loggedInResponse.suffixUrl}`;
     const gradesResponse = await sessionId.getWithRoutine(url, data, 23, reply);
 
-    return response.ok(gradesResponse.data, '', reply);
+    const $ = cheerio.load(gradesResponse.body);
+
+    const coefficientsTable = $('tbody')
+      .eq(1)
+      .children();
+
+    const coefficients = {
+      course: coefficientsTable
+        .eq(0)
+        .children()
+        .eq(1)
+        .text()
+        .trim(),
+      lastPeriod: coefficientsTable
+        .eq(0)
+        .children()
+        .eq(3)
+        .text()
+        .trim(),
+    };
+
+    const subjectsTable = $('tbody')
+      .eq(2)
+      .children();
+
+    const subjectsAmount = subjectsTable.length;
+
+    const subjectsGrades = [];
+
+    for (let index = 1; index < subjectsAmount; index += 1) {
+      subjectsGrades.push({
+        code: subjectsTable
+          .eq(index)
+          .children()
+          .eq(0)
+          .text()
+          .trim(),
+        name: subjectsTable
+          .eq(index)
+          .children()
+          .eq(1)
+          .text()
+          .trim(),
+        class: subjectsTable
+          .eq(index)
+          .children()
+          .eq(2)
+          .text()
+          .trim(),
+        firstGrade: subjectsTable
+          .eq(index)
+          .children()
+          .eq(3)
+          .text()
+          .trim(),
+        secondGrade: subjectsTable
+          .eq(index)
+          .children()
+          .eq(4)
+          .text()
+          .trim(),
+        averageGrade: subjectsTable
+          .eq(index)
+          .children()
+          .eq(4)
+          .text()
+          .trim(),
+        finalGrade: subjectsTable
+          .eq(index)
+          .children()
+          .eq(4)
+          .text()
+          .trim(),
+        finalAverageGrade: subjectsTable
+          .eq(index)
+          .children()
+          .eq(4)
+          .text()
+          .trim(),
+        finalSituation: subjectsTable
+          .eq(index)
+          .children()
+          .eq(4)
+          .text()
+          .trim(),
+      });
+    }
+
+    return response.ok({ coefficients, subjectsGrades }, null, reply);
   } catch (error) {
     return response.badRequest(error.message, '', reply);
   }
