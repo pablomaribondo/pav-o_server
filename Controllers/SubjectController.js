@@ -347,9 +347,76 @@ async function schedule(request, reply) {
     const loggedInResponse = await login.get(data, reply);
 
     const url = `${process.env.COLLEGE_LOGIN_URL}${loggedInResponse.suffixUrl}`;
-    const gradesResponse = await sessionId.getWithRoutine(url, data, 22, reply);
+    const scheduleResponse = await sessionId.getWithRoutine(url, data, 22, reply);
 
-    return response.ok(gradesResponse.data, '', reply);
+    const $ = cheerio.load(scheduleResponse.body);
+
+    const subjectsTable = $('tbody')
+      .eq(1)
+      .children();
+
+    const subjectsAmount = subjectsTable.length;
+
+    const subjectsSchedule = [];
+
+    for (let index = 2; index < subjectsAmount; index += 1) {
+      subjectsSchedule.push({
+        code: subjectsTable
+          .eq(index)
+          .children()
+          .eq(0)
+          .text()
+          .trim(),
+        name: subjectsTable
+          .eq(index)
+          .children()
+          .eq(1)
+          .text()
+          .trim(),
+        class: subjectsTable
+          .eq(index)
+          .children()
+          .eq(2)
+          .text()
+          .trim(),
+        firstGrade: {
+          firstExame: subjectsTable
+            .eq(index)
+            .children()
+            .eq(3)
+            .text()
+            .trim(),
+          secondExame: subjectsTable
+            .eq(index)
+            .children()
+            .eq(4)
+            .text()
+            .trim(),
+        },
+        secondGrade: {
+          firstExame: subjectsTable
+            .eq(index)
+            .children()
+            .eq(5)
+            .text()
+            .trim(),
+          secondExame: subjectsTable
+            .eq(index)
+            .children()
+            .eq(6)
+            .text()
+            .trim(),
+        },
+        finalGrade: subjectsTable
+          .eq(index)
+          .children()
+          .eq(7)
+          .text()
+          .trim(),
+      });
+    }
+
+    return response.ok({ subjectsSchedule }, null, reply);
   } catch (error) {
     return response.badRequest(error.message, '', reply);
   }
