@@ -103,9 +103,54 @@ async function covered(request, reply) {
     const loggedInResponse = await login.get(data, reply);
 
     const url = `${process.env.COLLEGE_LOGIN_URL}${loggedInResponse.suffixUrl}`;
-    const gradesResponse = await sessionId.getWithRoutine(url, data, 31, reply);
+    const coveredResponse = await sessionId.getWithRoutine(url, data, 31, reply);
 
-    return response.ok(gradesResponse.data, '', reply);
+    const $ = cheerio.load(coveredResponse.body);
+
+    const subjectsTable = $('tbody')
+      .eq(1)
+      .children();
+
+    const subjectsAmount = subjectsTable.length;
+
+    const coveredSubjects = [];
+
+    for (let index = 1; index < subjectsAmount - 1; index += 1) {
+      coveredSubjects.push({
+        period: subjectsTable
+          .eq(index)
+          .children()
+          .eq(0)
+          .text()
+          .trim(),
+        code: subjectsTable
+          .eq(index)
+          .children()
+          .eq(1)
+          .text()
+          .trim(),
+        name: subjectsTable
+          .eq(index)
+          .children()
+          .eq(2)
+          .text()
+          .trim(),
+        averageGrade: subjectsTable
+          .eq(index)
+          .children()
+          .eq(3)
+          .text()
+          .trim(),
+        situation: subjectsTable
+          .eq(index)
+          .children()
+          .eq(4)
+          .text()
+          .trim(),
+      });
+    }
+
+    return response.ok(coveredSubjects, null, reply);
   } catch (error) {
     return response.badRequest(error.message, '', reply);
   }
