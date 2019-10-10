@@ -11,7 +11,7 @@ async function get(request, reply) {
   try {
     const loginResponse = await sessionId.get(process.env.COLLEGE_LOGIN_URL, reply);
 
-    const url = `${process.env.COLLEGE_LOGIN_URL}${loginResponse}`;
+    const url = `${process.env.COLLEGE_LOGIN_URL}${loginResponse.suffixUrl}`;
     const loggedInResponse = await sessionId.getWithRoutine(url, request, 1, reply);
 
     return loggedInResponse;

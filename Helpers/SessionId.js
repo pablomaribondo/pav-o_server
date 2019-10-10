@@ -17,7 +17,10 @@ async function get(url, reply) {
     const $ = cheerio.load(body);
     const suffixUrl = $('form').attr('action');
 
-    return suffixUrl;
+    return {
+      body,
+      suffixUrl,
+    };
   } catch (error) {
     return response.badRequest(error.message, '', reply);
   }
@@ -32,25 +35,35 @@ async function get(url, reply) {
  * @returns {string} Sufixo da url com um JSESSIONID válido
  */
 async function getWithRoutine(url, request, routine, reply) {
-  const data = querystring.stringify({
+  let data = {
     rotina: routine,
-    Matricula: request.registration,
-    Digito: request.digit,
-    Senha: request.token,
-  });
+  };
+
+  if (routine === 1) {
+    data = Object.assign(data, {
+      Matricula: request.registration,
+      Digito: request.digit,
+      Senha: request.token,
+    });
+  }
+
+  const formattedData = querystring.stringify(data);
 
   try {
     const { body } = await got.post(url, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: data,
+      body: formattedData,
     });
 
     const $ = cheerio.load(body);
     const suffixUrl = $('form').attr('action');
 
-    return suffixUrl;
+    return {
+      body,
+      suffixUrl,
+    };
   } catch (error) {
     return response.badRequest(error.message, '', reply);
   }

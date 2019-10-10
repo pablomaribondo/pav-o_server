@@ -1,3 +1,5 @@
+const cheerio = require('cheerio');
+
 const login = require('../Helpers/Login');
 const sessionId = require('../Helpers/SessionId');
 const response = require('../response');
@@ -15,10 +17,73 @@ async function coursing(request, reply) {
   try {
     const loggedInResponse = await login.get(data, reply);
 
-    const url = `${process.env.COLLEGE_LOGIN_URL}${loggedInResponse}`;
-    const gradesResponse = await sessionId.getWithRoutine(url, data, 21, reply);
+    const url = `${process.env.COLLEGE_LOGIN_URL}${loggedInResponse.suffixUrl}`;
+    const coursingResponse = await sessionId.getWithRoutine(url, data, 21, reply);
 
-    return response.ok(gradesResponse.data, '', reply);
+    const $ = cheerio.load(coursingResponse.body);
+
+    const subjectsTable = $('tbody')
+      .eq(1)
+      .children();
+
+    const subjectsAmount = subjectsTable.length;
+
+    const coursingSubjects = [];
+
+    for (let index = 1; index < subjectsAmount - 1; index += 1) {
+      coursingSubjects.push({
+        code: subjectsTable
+          .eq(index)
+          .children()
+          .eq(0)
+          .text()
+          .trim(),
+        name: subjectsTable
+          .eq(index)
+          .children()
+          .eq(1)
+          .text()
+          .trim(),
+        class: subjectsTable
+          .eq(index)
+          .children()
+          .eq(2)
+          .text()
+          .trim(),
+        room: subjectsTable
+          .eq(index)
+          .children()
+          .eq(3)
+          .text()
+          .trim(),
+        schedule: subjectsTable
+          .eq(index)
+          .children()
+          .eq(4)
+          .text()
+          .trim(),
+        workload: subjectsTable
+          .eq(index)
+          .children()
+          .eq(5)
+          .text()
+          .trim(),
+        credits: subjectsTable
+          .eq(index)
+          .children()
+          .eq(6)
+          .text()
+          .trim(),
+        period: subjectsTable
+          .eq(index)
+          .children()
+          .eq(7)
+          .text()
+          .trim(),
+      });
+    }
+
+    return response.ok(coursingSubjects, null, reply);
   } catch (error) {
     return response.badRequest(error.message, '', reply);
   }
@@ -37,7 +102,7 @@ async function covered(request, reply) {
   try {
     const loggedInResponse = await login.get(data, reply);
 
-    const url = `${process.env.COLLEGE_LOGIN_URL}${loggedInResponse}`;
+    const url = `${process.env.COLLEGE_LOGIN_URL}${loggedInResponse.suffixUrl}`;
     const gradesResponse = await sessionId.getWithRoutine(url, data, 31, reply);
 
     return response.ok(gradesResponse.data, '', reply);
@@ -59,7 +124,7 @@ async function grades(request, reply) {
   try {
     const loggedInResponse = await login.get(data, reply);
 
-    const url = `${process.env.COLLEGE_LOGIN_URL}${loggedInResponse}`;
+    const url = `${process.env.COLLEGE_LOGIN_URL}${loggedInResponse.suffixUrl}`;
     const gradesResponse = await sessionId.getWithRoutine(url, data, 23, reply);
 
     return response.ok(gradesResponse.data, '', reply);
@@ -81,7 +146,7 @@ async function pending(request, reply) {
   try {
     const loggedInResponse = await login.get(data, reply);
 
-    const url = `${process.env.COLLEGE_LOGIN_URL}${loggedInResponse}`;
+    const url = `${process.env.COLLEGE_LOGIN_URL}${loggedInResponse.suffixUrl}`;
     const gradesResponse = await sessionId.getWithRoutine(url, data, 32, reply);
 
     return response.ok(gradesResponse.data, '', reply);
@@ -103,7 +168,7 @@ async function schedule(request, reply) {
   try {
     const loggedInResponse = await login.get(data, reply);
 
-    const url = `${process.env.COLLEGE_LOGIN_URL}${loggedInResponse}`;
+    const url = `${process.env.COLLEGE_LOGIN_URL}${loggedInResponse.suffixUrl}`;
     const gradesResponse = await sessionId.getWithRoutine(url, data, 22, reply);
 
     return response.ok(gradesResponse.data, '', reply);
