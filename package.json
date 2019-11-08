@@ -19,11 +19,11 @@
   },
   "lint-staged": {
     "*.+(js)": [
-      "eslint --fix",
+      "lint --fix",
       "git add"
     ],
     "*.+(json|md)": [
-      "prettier --write",
+      "format --write",
       "git add"
     ]
   },
