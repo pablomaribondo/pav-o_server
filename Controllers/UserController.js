@@ -42,7 +42,7 @@ async function show(request, reply) {
         .text()
         .trim(),
     }
-console.log()
+
     return response.ok({ userInfo }, null, reply);
   } catch (error) {
     return response.badRequest(error.message, '', reply);
