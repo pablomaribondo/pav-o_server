@@ -6,13 +6,24 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "./node_modules/.bin/eslint .",
-    "fix": "./node_modules/.bin/eslint . --fix",
-    "lint-report": "./node_modules/.bin/eslint -f json -o ./lint-report.json .",
-    "precommit": "lint-staged"
+    "lint:fix": "./node_modules/.bin/eslint . --fix",
+    "lint:report": "./node_modules/.bin/eslint -f json -o ./lint-report.json .",
+    "format": "prettier --write \"**/*.+(js|json|yml|yaml|md)\"",
+    "start": "node index.js",
+    "dev": "NODE_ENV=development nodemon index.js"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "lint-staged": {
-    "*.{js}": [
-      "eslint",
+    "*.+(js)": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.+(json|md)": [
+      "prettier --write",
       "git add"
     ]
   },
