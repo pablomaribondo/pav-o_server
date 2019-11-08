@@ -43,9 +43,9 @@ async function show(request, reply) {
         .trim(),
     };
 
-    return response.ok({ userInfo }, null, reply);
+    return response.ok({ userInfo }, null, reply)
   } catch (error) {
-    return response.badRequest(error.message, '', reply)
+    return response.badRequest(error.message, '', reply);
   }
 }
 
