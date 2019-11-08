@@ -41,8 +41,8 @@ async function show(request, reply) {
         .eq(1)
         .text()
         .trim(),
-    };
-
+    }
+console.log()
     return response.ok({ userInfo }, null, reply);
   } catch (error) {
     return response.badRequest(error.message, '', reply);
