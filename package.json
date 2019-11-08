@@ -14,13 +14,12 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "echo 'ola'"
+      "pre-commit": "lint-staged"
     }
   },
   "lint-staged": {
     "*.+(js)": [
-      "echo 'hello';",
-      "eslint",
+      "eslint --fix",
       "git add"
     ],
     "*.+(json|md)": [
@@ -56,7 +55,7 @@
     "eslint-config-prettier": "^6.4.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-prettier": "^3.1.1",
-    "husky": "^3.0.8",
+    "husky": "2.4.1",
     "lint-staged": "^9.4.1",
     "nodemon": "^1.19.3",
     "prettier": "^1.18.2"
