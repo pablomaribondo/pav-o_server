@@ -19,6 +19,7 @@
   },
   "lint-staged": {
     "*.+(js)": [
+      "echo 'hello';",
       "eslint",
       "git add"
     ],
