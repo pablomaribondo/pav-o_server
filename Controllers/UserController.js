@@ -18,6 +18,12 @@ async function show(request, reply) {
 
     const $ = cheerio.load(loggedInResponse.body);
 
+    const errorMessage = $('h5').text();
+
+    if (errorMessage) {
+      throw new Error(errorMessage);
+    }
+
     const userInfoTable = $('tbody')
       .eq(0)
       .children();
