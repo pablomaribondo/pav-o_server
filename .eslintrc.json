@@ -1,22 +1,37 @@
 {
     "env": {
+        "commonjs": true,
         "es6": true,
         "node": true
     },
     "extends": [
-        "airbnb-base"
+        "airbnb-base",
+        "prettier",
+        "plugin:prettier/recommended",
+        "eslint-config-prettier"
     ],
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
     },
     "parserOptions": {
-        "ecmaVersion": 2018,
-        "sourceType": "module"
+        "ecmaVersion": 2018
     },
     "rules": {
         "no-console": "error",
+        "no-underscore-dangle": "off",
+        "global-require": 0,
         "import/no-unresolved": "off",
+        "import/prefer-default-export": "off",
+        "import/no-extraneous-dependencies": [
+          "error",
+          {
+            "devDependencies": true,
+            "optionalDependencies": false,
+            "peerDependencies": false,
+            "packageDir": "./"
+          }
+        ],
         "prettier/prettier": [
           "error",
           {
@@ -26,5 +41,7 @@
           }
         ]
     },
-    "plugins": ["prettier"]
+    "plugins": [
+      "prettier"
+    ]
 }

@@ -1,8 +1,15 @@
 const subjects = require('./Controllers/SubjectController');
+const users = require('./Controllers/UserController');
 
 async function routes(fastify) {
   fastify.get('/', (request, reply) => {
     reply.send({ healthcheck: 'Pavão' });
+  });
+
+  fastify.route({
+    method: 'GET',
+    url: '/api/v1/grad-student/',
+    handler: users.show,
   });
 
   fastify.route({
