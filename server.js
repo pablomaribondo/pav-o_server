@@ -1,10 +1,13 @@
 require('dotenv').config();
+const cors = require('cors');
 
 const fastify = require('fastify')({
   logger: true,
 });
 
 fastify.register(require('./routes'));
+
+fastify.use(cors());
 
 const start = async () => {
   try {
