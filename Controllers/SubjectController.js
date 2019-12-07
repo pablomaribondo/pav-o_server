@@ -1,6 +1,6 @@
 const cheerio = require('cheerio');
 
-const login = require('../Helpers/Login');
+const loginHelper = require('../Helpers/Login');
 const sessionId = require('../Helpers/SessionId');
 const response = require('../response');
 
@@ -15,7 +15,7 @@ async function coursing(request, reply) {
   const data = { registration, digit, token };
 
   try {
-    const loggedInResponse = await login.get(data, reply);
+    const loggedInResponse = await loginHelper.get(data, reply);
 
     const url = `${process.env.COLLEGE_LOGIN_URL}${loggedInResponse.suffixUrl}`;
     const coursingResponse = await sessionId.getWithRoutine(url, data, 21, reply);
@@ -100,7 +100,7 @@ async function covered(request, reply) {
   const data = { registration, digit, token };
 
   try {
-    const loggedInResponse = await login.get(data, reply);
+    const loggedInResponse = await loginHelper.get(data, reply);
 
     const url = `${process.env.COLLEGE_LOGIN_URL}${loggedInResponse.suffixUrl}`;
     const coveredResponse = await sessionId.getWithRoutine(url, data, 31, reply);
@@ -167,7 +167,7 @@ async function grades(request, reply) {
   const data = { registration, digit, token };
 
   try {
-    const loggedInResponse = await login.get(data, reply);
+    const loggedInResponse = await loginHelper.get(data, reply);
 
     const url = `${process.env.COLLEGE_LOGIN_URL}${loggedInResponse.suffixUrl}`;
     const gradesResponse = await sessionId.getWithRoutine(url, data, 23, reply);
@@ -277,7 +277,7 @@ async function pending(request, reply) {
   const data = { registration, digit, token };
 
   try {
-    const loggedInResponse = await login.get(data, reply);
+    const loggedInResponse = await loginHelper.get(data, reply);
 
     const url = `${process.env.COLLEGE_LOGIN_URL}${loggedInResponse.suffixUrl}`;
     const pendingResponse = await sessionId.getWithRoutine(url, data, 32, reply);
@@ -344,7 +344,7 @@ async function schedule(request, reply) {
   const data = { registration, digit, token };
 
   try {
-    const loggedInResponse = await login.get(data, reply);
+    const loggedInResponse = await loginHelper.get(data, reply);
 
     const url = `${process.env.COLLEGE_LOGIN_URL}${loggedInResponse.suffixUrl}`;
     const scheduleResponse = await sessionId.getWithRoutine(url, data, 22, reply);

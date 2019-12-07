@@ -1,6 +1,6 @@
 const cheerio = require('cheerio');
 
-const login = require('../Helpers/Login');
+const loginHelper = require('../Helpers/Login');
 const response = require('../response');
 
 /**
@@ -9,12 +9,12 @@ const response = require('../response');
  * @param {Reply} reply - Resposta para o cliente
  * @returns {Object} Dados do Usuário
  */
-async function show(request, reply) {
-  const { registration, digit, token } = request.headers;
+async function login(request, reply) {
+  const { registration, digit, token } = request.body;
   const data = { registration, digit, token };
 
   try {
-    const loggedInResponse = await login.get(data, reply);
+    const loggedInResponse = await loginHelper.get(data, reply);
 
     const $ = cheerio.load(loggedInResponse.body);
 
@@ -56,5 +56,5 @@ async function show(request, reply) {
 }
 
 module.exports = {
-  show,
+  login,
 };

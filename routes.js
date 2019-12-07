@@ -7,9 +7,9 @@ async function routes(fastify) {
   });
 
   fastify.route({
-    method: 'GET',
-    url: '/api/v1/grad-student/',
-    handler: users.show,
+    method: 'POST',
+    url: '/api/v1/grad-student/login',
+    handler: users.login,
   });
 
   fastify.route({

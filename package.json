@@ -45,6 +45,7 @@
   "homepage": "https://github.com/pablomaribondo/pavao-server#readme",
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
+    "cors": "^2.8.5",
     "dotenv": "^8.1.0",
     "fastify": "^2.9.0",
     "got": "^9.6.0"
