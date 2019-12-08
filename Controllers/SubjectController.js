@@ -149,25 +149,25 @@ async function grades(request, suffixUrl, reply) {
         averageGrade: subjectsTable
           .eq(index)
           .children()
-          .eq(4)
+          .eq(5)
           .text()
           .trim(),
         finalGrade: subjectsTable
           .eq(index)
           .children()
-          .eq(4)
+          .eq(6)
           .text()
           .trim(),
         finalAverageGrade: subjectsTable
           .eq(index)
           .children()
-          .eq(4)
+          .eq(7)
           .text()
           .trim(),
         finalSituation: subjectsTable
           .eq(index)
           .children()
-          .eq(4)
+          .eq(8)
           .text()
           .trim(),
       });
@@ -427,7 +427,7 @@ async function coursing(request, reply) {
 
     const coursingWithSchedule = coursingWithGrades.map(subject => ({
       ...subject,
-      schedule: coursingSchedule.subjectsSchedule.find(
+      examSchedule: coursingSchedule.subjectsSchedule.find(
         scheduleElement => subject.code === scheduleElement.code
       ),
     }));
@@ -438,19 +438,20 @@ async function coursing(request, reply) {
         name: subject.name,
         class: subject.class,
         room: subject.room,
+        schedule: subject.schedule,
         workload: subject.workload,
         credits: subject.credits,
         period: subject.period,
-        schedule: {
+        examSchedule: {
           firstGrade: {
-            firstExame: subject.schedule.firstGrade.firstExame,
-            secondExame: subject.schedule.firstGrade.secondExame,
+            firstExame: subject.examSchedule.firstGrade.firstExame,
+            secondExame: subject.examSchedule.firstGrade.secondExame,
           },
           secondGrade: {
-            firstExame: subject.schedule.secondGrade.firstExame,
-            secondExame: subject.schedule.secondGrade.secondExame,
+            firstExame: subject.examSchedule.secondGrade.firstExame,
+            secondExame: subject.examSchedule.secondGrade.secondExame,
           },
-          finalGrade: subject.schedule.finalGrade,
+          finalGrade: subject.examSchedule.finalGrade,
         },
         grades: {
           firstGrade: subject.grades.firstGrade,
