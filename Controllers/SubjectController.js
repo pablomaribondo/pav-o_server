@@ -2,6 +2,7 @@ const cheerio = require('cheerio');
 
 const loginHelper = require('../Helpers/Login');
 const sessionId = require('../Helpers/SessionId');
+const { subjectSituation } = require('../Enums/SubjectSituationEnum');
 const response = require('../response');
 
 /**
@@ -56,12 +57,14 @@ async function covered(request, reply) {
           .eq(3)
           .text()
           .trim(),
-        situation: subjectsTable
-          .eq(index)
-          .children()
-          .eq(4)
-          .text()
-          .trim(),
+        situation: subjectSituation.get(
+          subjectsTable
+            .eq(index)
+            .children()
+            .eq(4)
+            .text()
+            .trim()
+        ).value,
       });
     }
 
