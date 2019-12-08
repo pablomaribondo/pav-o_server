@@ -432,8 +432,39 @@ async function coursing(request, reply) {
       ),
     }));
 
+    const formatedCoursingSubjects = coursingWithSchedule.map(subject => {
+      return {
+        code: subject.code,
+        name: subject.name,
+        class: subject.class,
+        room: subject.room,
+        workload: subject.workload,
+        credits: subject.credits,
+        period: subject.period,
+        schedule: {
+          firstGrade: {
+            firstExame: subject.schedule.firstGrade.firstExame,
+            secondExame: subject.schedule.firstGrade.secondExame,
+          },
+          secondGrade: {
+            firstExame: subject.schedule.secondGrade.firstExame,
+            secondExame: subject.schedule.secondGrade.secondExame,
+          },
+          finalGrade: subject.schedule.finalGrade,
+        },
+        grades: {
+          firstGrade: subject.grades.firstGrade,
+          secondGrade: subject.grades.secondGrade,
+          averageGrade: subject.grades.averageGrade,
+          finalGrade: subject.grades.finalGrade,
+          finalAverageGrade: subject.grades.finalAverageGrade,
+          finalSituation: subject.grades.finalSituation,
+        },
+      };
+    });
+
     return response.ok(
-      { coursingSubjects: coursingWithSchedule, coefficients: coursingGrades.coefficients },
+      { coursingSubjects: formatedCoursingSubjects, coefficients: coursingGrades.coefficients },
       null,
       reply
     );
