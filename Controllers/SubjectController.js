@@ -5,91 +5,6 @@ const sessionId = require('../Helpers/SessionId');
 const response = require('../response');
 
 /**
- * Função para retornar as disciplinas sendo cursadas pelo usuário neste período
- * @param {Object} request - Pedido do cliente
- * @param {Reply} reply - Resposta para o cliente
- * @returns {Object} Disciplinas do período
- */
-async function coursing(request, reply) {
-  const { registration, digit, token } = request.headers;
-  const data = { registration, digit, token };
-
-  try {
-    const loggedInResponse = await loginHelper.get(data, reply);
-
-    const url = `${process.env.COLLEGE_LOGIN_URL}${loggedInResponse.suffixUrl}`;
-    const coursingResponse = await sessionId.getWithRoutine(url, data, 21, reply);
-
-    const $ = cheerio.load(coursingResponse.body);
-
-    const subjectsTable = $('tbody')
-      .eq(1)
-      .children();
-
-    const subjectsAmount = subjectsTable.length;
-
-    const coursingSubjects = [];
-
-    for (let index = 1; index < subjectsAmount - 1; index += 1) {
-      coursingSubjects.push({
-        code: subjectsTable
-          .eq(index)
-          .children()
-          .eq(0)
-          .text()
-          .trim(),
-        name: subjectsTable
-          .eq(index)
-          .children()
-          .eq(1)
-          .text()
-          .trim(),
-        class: subjectsTable
-          .eq(index)
-          .children()
-          .eq(2)
-          .text()
-          .trim(),
-        room: subjectsTable
-          .eq(index)
-          .children()
-          .eq(3)
-          .text()
-          .trim(),
-        schedule: subjectsTable
-          .eq(index)
-          .children()
-          .eq(4)
-          .text()
-          .trim(),
-        workload: subjectsTable
-          .eq(index)
-          .children()
-          .eq(5)
-          .text()
-          .trim(),
-        credits: subjectsTable
-          .eq(index)
-          .children()
-          .eq(6)
-          .text()
-          .trim(),
-        period: subjectsTable
-          .eq(index)
-          .children()
-          .eq(7)
-          .text()
-          .trim(),
-      });
-    }
-
-    return response.ok({ coursingSubjects }, null, reply);
-  } catch (error) {
-    return response.badRequest(error.message, '', reply);
-  }
-}
-
-/**
  * Função para retornar as disciplinas já cursadas pelo usuário
  * @param {Object} request - Pedido do cliente
  * @param {Reply} reply - Resposta para o cliente
@@ -162,14 +77,12 @@ async function covered(request, reply) {
  * @param {Reply} reply - Resposta para o cliente
  * @returns {Object} Notas do período
  */
-async function grades(request, reply) {
+async function grades(request, suffixUrl, reply) {
   const { registration, digit, token } = request.headers;
   const data = { registration, digit, token };
 
   try {
-    const loggedInResponse = await loginHelper.get(data, reply);
-
-    const url = `${process.env.COLLEGE_LOGIN_URL}${loggedInResponse.suffixUrl}`;
+    const url = `${process.env.COLLEGE_LOGIN_URL}${suffixUrl}`;
     const gradesResponse = await sessionId.getWithRoutine(url, data, 23, reply);
 
     const $ = cheerio.load(gradesResponse.body);
@@ -260,7 +173,7 @@ async function grades(request, reply) {
       });
     }
 
-    return response.ok({ coefficients, subjectsGrades }, null, reply);
+    return { coefficients, subjectsGrades };
   } catch (error) {
     return response.badRequest(error.message, '', reply);
   }
@@ -339,14 +252,12 @@ async function pending(request, reply) {
  * @param {Reply} reply - Resposta para o cliente
  * @returns {Object} Calendário de provas
  */
-async function schedule(request, reply) {
+async function schedule(request, suffixUrl, reply) {
   const { registration, digit, token } = request.headers;
   const data = { registration, digit, token };
 
   try {
-    const loggedInResponse = await loginHelper.get(data, reply);
-
-    const url = `${process.env.COLLEGE_LOGIN_URL}${loggedInResponse.suffixUrl}`;
+    const url = `${process.env.COLLEGE_LOGIN_URL}${suffixUrl}`;
     const scheduleResponse = await sessionId.getWithRoutine(url, data, 22, reply);
 
     const $ = cheerio.load(scheduleResponse.body);
@@ -416,7 +327,116 @@ async function schedule(request, reply) {
       });
     }
 
-    return response.ok({ subjectsSchedule }, null, reply);
+    return { subjectsSchedule };
+  } catch (error) {
+    return response.badRequest(error.message, '', reply);
+  }
+}
+
+/**
+ * Função para retornar as disciplinas sendo cursadas pelo usuário neste período
+ * @param {Object} request - Pedido do cliente
+ * @param {Reply} reply - Resposta para o cliente
+ * @returns {Object} Disciplinas do período
+ */
+async function coursing(request, reply) {
+  const { registration, digit, token } = request.headers;
+  const data = { registration, digit, token };
+
+  try {
+    const loggedInResponse = await loginHelper.get(data, reply);
+
+    const url = `${process.env.COLLEGE_LOGIN_URL}${loggedInResponse.suffixUrl}`;
+    const coursingResponse = await sessionId.getWithRoutine(url, data, 21, reply);
+
+    const $ = cheerio.load(coursingResponse.body);
+
+    const subjectsTable = $('tbody')
+      .eq(1)
+      .children();
+
+    const subjectsAmount = subjectsTable.length;
+
+    const coursingSubjects = [];
+
+    for (let index = 1; index < subjectsAmount - 1; index += 1) {
+      coursingSubjects.push({
+        code: subjectsTable
+          .eq(index)
+          .children()
+          .eq(0)
+          .text()
+          .trim(),
+        name: subjectsTable
+          .eq(index)
+          .children()
+          .eq(1)
+          .text()
+          .trim(),
+        class: subjectsTable
+          .eq(index)
+          .children()
+          .eq(2)
+          .text()
+          .trim(),
+        room: subjectsTable
+          .eq(index)
+          .children()
+          .eq(3)
+          .text()
+          .trim(),
+        schedule: subjectsTable
+          .eq(index)
+          .children()
+          .eq(4)
+          .text()
+          .trim(),
+        workload: subjectsTable
+          .eq(index)
+          .children()
+          .eq(5)
+          .text()
+          .trim(),
+        credits: subjectsTable
+          .eq(index)
+          .children()
+          .eq(6)
+          .text()
+          .trim(),
+        period: subjectsTable
+          .eq(index)
+          .children()
+          .eq(7)
+          .text()
+          .trim(),
+      });
+    }
+
+    const suffixUrl = $('form').attr('action');
+
+    const coursingGrades = await grades(request, suffixUrl, reply);
+
+    const coursingWithGrades = coursingSubjects.map(subject => ({
+      ...subject,
+      grades: coursingGrades.subjectsGrades.find(
+        gradeElement => subject.code === gradeElement.code
+      ),
+    }));
+
+    const coursingSchedule = await schedule(request, suffixUrl, reply);
+
+    const coursingWithSchedule = coursingWithGrades.map(subject => ({
+      ...subject,
+      schedule: coursingSchedule.subjectsSchedule.find(
+        scheduleElement => subject.code === scheduleElement.code
+      ),
+    }));
+
+    return response.ok(
+      { coursingSubjects: coursingWithSchedule, coefficients: coursingGrades.coefficients },
+      null,
+      reply
+    );
   } catch (error) {
     return response.badRequest(error.message, '', reply);
   }
@@ -425,7 +445,5 @@ async function schedule(request, reply) {
 module.exports = {
   coursing,
   covered,
-  grades,
   pending,
-  schedule,
 };

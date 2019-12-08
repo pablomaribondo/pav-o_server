@@ -26,20 +26,8 @@ async function routes(fastify) {
 
   fastify.route({
     method: 'GET',
-    url: '/api/v1/grad-student/subjects/grades',
-    handler: subjects.grades,
-  });
-
-  fastify.route({
-    method: 'GET',
     url: '/api/v1/grad-student/subjects/pending',
     handler: subjects.pending,
-  });
-
-  fastify.route({
-    method: 'GET',
-    url: '/api/v1/grad-student/subjects/schedule',
-    handler: subjects.schedule,
   });
 }
 
