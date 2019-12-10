@@ -9,8 +9,8 @@
     "lint:fix": "./node_modules/.bin/eslint . --fix",
     "lint:report": "./node_modules/.bin/eslint -f json -o ./lint-report.json .",
     "format": "prettier --write \"**/*.+(js|json|yml|yaml|md)\"",
-    "start": "node index.js",
-    "dev": "NODE_ENV=development nodemon index.js"
+    "start": "node server.js",
+    "dev": "NODE_ENV=development nodemon server.js"
   },
   "husky": {
     "hooks": {
